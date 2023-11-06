@@ -21,6 +21,7 @@ const login = async (req, res) => {
 
   try {
     const user = await User.findOne({ where: { email } });
+
     const { id, name, password } = user;
 
     const match = await bcrypt.compare(password_requested, password);
@@ -35,6 +36,9 @@ const login = async (req, res) => {
 
     const secretKey = process.env.SECRET_KEY || 'rahasia';
     const token = jwt.sign(token_payload, secretKey, { expiresIn: '1d' });
+
+    // res.header('Access-Control-Allow-Credentials', true);
+    // res.cookie('token', 'Bearer ' + token, { maxAge: 3600000 });
 
     return res.status(200).json(respond(200, 'Login successfuly', { email, token }));
   } catch (error) {

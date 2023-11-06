@@ -9,6 +9,12 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Post.belongsTo(models.User, { foreignKey: 'user_id', as: 'user' });
+      Post.belongsToMany(models.Tag, {
+        through: 'Tag_Post', // Nama model perantara
+        foreignKey: 'post_id', // Nama kolom di model Tag_Post yang menghubungkan ke Post
+        as: 'tags', // Alias yang digunakan untuk mengakses tags
+      });
     }
   }
   Post.init(
@@ -21,7 +27,7 @@ module.exports = (sequelize, DataTypes) => {
       body: DataTypes.TEXT,
       like: DataTypes.INTEGER,
       view: DataTypes.INTEGER,
-      is_publish: DataTypes.BOOLEAN,
+      is_publish: { type: DataTypes.BOOLEAN, defaultValue: false },
       is_delete: {
         type: DataTypes.BOOLEAN,
         defaultValue: false,

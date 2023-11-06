@@ -1,7 +1,5 @@
 'use strict';
-const {
-  Model
-} = require('sequelize');
+const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Tag extends Model {
     /**
@@ -11,14 +9,22 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Tag.belongsToMany(models.Post, {
+        through: 'Tag_Post', // Nama model perantara
+        foreignKey: 'tag_id', // Nama kolom di model Tag_Post yang menghubungkan ke Tag
+        as: 'posts', // Alias yang digunakan untuk mengakses posts
+      });
     }
   }
-  Tag.init({
-    name: DataTypes.STRING,
-    about: DataTypes.TEXT
-  }, {
-    sequelize,
-    modelName: 'Tag',
-  });
+  Tag.init(
+    {
+      name: { type: DataTypes.STRING, unique: true },
+      about: DataTypes.TEXT,
+    },
+    {
+      sequelize,
+      modelName: 'Tag',
+    }
+  );
   return Tag;
 };

@@ -1,3 +1,3 @@
-const { getEducations, createEducation } = require('./education');
+const { getEducations, getDetailEducation, createEducation, deleteEducation, updateEducation } = require('./education');
 
-module.exports = { getEducations, createEducation };
+module.exports = { getEducations, getDetailEducation, createEducation, deleteEducation, updateEducation };
