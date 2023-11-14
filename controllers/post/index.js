@@ -57,7 +57,7 @@ const getPost = async (req, res) => {
   try {
     const post = await Post.findByPk(id, { include: 'tags' });
     if (!post) throw 'Post not found';
-    return res.json({ post });
+    return res.status(200).json(respond(200, 'Get detail post successfuly', post));
   } catch (error) {
     return res.status(500).json(respond(500, error, ''));
   }
@@ -114,10 +114,29 @@ const updatePost = async (req, res) => {
   }
 };
 
+const publish = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const post = await Post.findByPk(id);
+    post.is_publish = true;
+    await post.save();
+
+    return res.status(200).json(respond(200, 'Publish post successfuly', post));
+  } catch (error) {
+    return res.status(500).json(respond(500, error, ''));
+  }
+};
+
 const unPublish = async (req, res) => {
   const { id } = req.params;
 
   try {
+    const post = await Post.findByPk(id);
+    post.is_publish = false;
+    await post.save();
+
+    return res.status(200).json(respond(200, 'Publish post successfuly', post));
   } catch (error) {
     return res.status(500).json(respond(500, error, ''));
   }
@@ -132,4 +151,4 @@ const deletePost = async (req, res) => {
   }
 };
 
-module.exports = { getPosts, getPost, createPost, updatePost, unPublish, deletePost };
+module.exports = { getPosts, getPost, createPost, updatePost, publish, unPublish, deletePost };
