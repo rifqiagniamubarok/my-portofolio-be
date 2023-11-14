@@ -32,7 +32,7 @@ const getPosts = async (req, res) => {
       where: nameQuery,
       offset,
       limit,
-      attributes: ['thumbnail', 'title', 'slug', 'like', 'view', 'is_publish'],
+      attributes: ['id', 'thumbnail', 'title', 'slug', 'like', 'view', 'is_publish', 'meta_description'],
       include: [{ model: Tag, as: 'tags', attributes: ['name'] }],
     });
 
