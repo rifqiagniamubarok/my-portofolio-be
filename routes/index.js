@@ -9,6 +9,7 @@ const image = require('./image');
 const icon = require('./icon');
 const tag = require('./tag');
 const post = require('./post');
+const publicPost = require('./post/public');
 
 const Auth = require('../middlewares/auth');
 
@@ -20,5 +21,6 @@ router.use('/image', Auth, image);
 router.use('/icon', Auth, icon);
 router.use('/tag', Auth, tag);
 router.use('/post', Auth, post);
+router.use('/public/post', publicPost);
 
 module.exports = router;
