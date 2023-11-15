@@ -34,7 +34,7 @@ const getPosts = async (req, res) => {
       where: nameQuery,
       offset,
       limit,
-      attributes: ['id', 'thumbnail', 'title', 'slug', 'like', 'view', 'is_publish', 'meta_description'],
+      attributes: ['id', 'thumbnail', 'title', 'slug', 'like', 'view', 'is_publish', 'meta_description', 'createdAt'],
       include: [{ model: Tag, as: 'tags', attributes: ['name'] }],
     });
 
