@@ -26,4 +26,8 @@ app.use('/check', (req, res) => {
 
 app.use('/api/v1', routes);
 
-module.exports = app; // Ekspor app untuk digunakan oleh server.js
+const PORT = process.env.PORT || 3330;
+
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});
