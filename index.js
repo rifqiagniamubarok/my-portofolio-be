@@ -6,7 +6,7 @@ const port = process.env.PORT || 3330;
 const cors = require('cors');
 const routes = require('./routes');
 
-const allowOrigins = ['http://localhost:3000', 'http://localhost:3340'];
+const allowOrigins = ['http://localhost:3000', 'http://localhost:3340', 'https://rifqiagniamubarok.com'];
 
 app.use(
   cors({
