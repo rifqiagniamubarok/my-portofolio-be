@@ -9,5 +9,6 @@ router.patch('/:id', postControllers.updatePost);
 router.delete('/:id', postControllers.deletePost);
 
 router.post('/publish/:id', postControllers.publish);
+router.post('/unpublish/:id', postControllers.unPublish);
 
 module.exports = router;
