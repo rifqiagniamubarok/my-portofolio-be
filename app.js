@@ -5,23 +5,27 @@ const path = require('path');
 const cors = require('cors');
 const routes = require('./routes');
 
-const port = process.env.PORT || 3330;
-const allowOrigins = ['http://localhost:3000', 'http://localhost:3340', 'https://rifqiagniamubarok.com'];
+const whitelist = ['http://localhost:3000', 'http://localhost:3340', 'https://rifqiagniamubarok.com'];
 
-app.use(
-  cors({
-    origin: allowOrigins,
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    credentials: true,
-  })
-);
+// var whitelist = ['http://example1.com', 'http://example2.com']
+var corsOptionsDelegate = function (req, callback) {
+  var corsOptions;
+  if (whitelist.indexOf(req.header('Origin')) !== -1) {
+    corsOptions = { origin: true }; // reflect (enable) the requested origin in the CORS response
+  } else {
+    corsOptions = { origin: false }; // disable CORS for this request
+  }
+  callback(null, corsOptions); // callback expects two parameters: error and options
+};
+
+app.use(cors(corsOptionsDelegate));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use('/public', express.static(path.join(__dirname, 'public')));
+app.use('/public', express.static(path.join(__dirname, '/public')));
 
 app.use('/check', (req, res) => {
-  res.send('<p>OKKK</p>');
+  res.send('<p>COBA</p>');
 });
 
 app.use('/api/v1', routes);
