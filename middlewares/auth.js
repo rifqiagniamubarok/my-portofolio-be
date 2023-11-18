@@ -13,7 +13,7 @@ const auth = async (req, res, next) => {
   if (!token) return res.status(401).json(respond(401, 'you have no access', ''));
 
   try {
-    const decode = await jwt.verify(token, secretKey);
+    const decode = jwt.verify(token, secretKey);
     const { id, name, email } = decode;
     req.token = { id, name, email };
     next();

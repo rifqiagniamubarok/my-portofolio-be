@@ -1,7 +1,7 @@
 const Joi = require('joi');
 const respond = require('../../utils/respond');
 const { User } = require('../../models');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 const loginValidation = Joi.object({
