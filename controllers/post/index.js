@@ -105,10 +105,36 @@ const createPost = async (req, res) => {
   }
 };
 
+const updateValidation = Joi.object({
+  thumbnail: Joi.string(),
+  title: Joi.string(),
+  slug: Joi.string(),
+  meta_description: Joi.string(),
+  body: Joi.string(),
+  tags: Joi.array().items(Joi.number()),
+});
+
 const updatePost = async (req, res) => {
   const { id } = req.params;
 
   try {
+    const { error, value: body } = updateValidation.validate(req.body);
+    if (error) throw error.message;
+
+    const thumbnail = await Image.findOne({ where: { path: body.thumbnail } });
+    if (!thumbnail) throw 'Image not found';
+
+    const currentPost = await Post.findByPk(id);
+
+    for (let [key, value] of Object.entries(body)) {
+      if (key !== 'tags') currentPost[key] = value;
+    }
+
+    await currentPost.save();
+
+    const post = await Post.findByPk(currentPost.id, { include: 'tags' });
+
+    return res.status(200).json(respond(200, 'Edit successfuly', post));
   } catch (error) {
     return res.status(500).json(respond(500, error, ''));
   }
