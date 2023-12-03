@@ -10,6 +10,7 @@ const icon = require('./icon');
 const tag = require('./tag');
 const post = require('./post');
 const publicPost = require('./post/public');
+const techStack = require('./tech_stack');
 
 const Auth = require('../middlewares/auth');
 
@@ -22,5 +23,6 @@ router.use('/icon', Auth, icon);
 router.use('/tag', Auth, tag);
 router.use('/post', Auth, post);
 router.use('/public/post', publicPost);
+router.use('/tech-stack', Auth, techStack);
 
 module.exports = router;
