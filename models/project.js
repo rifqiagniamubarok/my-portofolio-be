@@ -8,12 +8,18 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      Project.hasMany(models.Project_View, {
+        foreignKey: 'project_id',
+      });
+      Project.belongsToMany(models.Tech_Stack_Icon, {
+        through: 'Tech_Stack_Project',
+        foreignKey: 'project_id',
+      });
     }
   }
   Project.init(
     {
-      user_id: DataTypes.INTEGER,
+      user_id: { type: DataTypes.INTEGER, defaultValue: 1 },
       thumbnail: DataTypes.INTEGER,
       title: DataTypes.STRING,
       slug: DataTypes.TEXT,
@@ -21,8 +27,8 @@ module.exports = (sequelize, DataTypes) => {
       body: DataTypes.TEXT,
       scale: DataTypes.STRING,
       status: DataTypes.STRING,
-      like: DataTypes.INTEGER,
-      view: DataTypes.INTEGER,
+      like: { type: DataTypes.INTEGER, defaultValue: 0 },
+      view: { type: DataTypes.INTEGER, defaultValue: 0 },
       is_publish: { type: DataTypes.BOOLEAN, defaultValue: false },
       is_delete: {
         type: DataTypes.BOOLEAN,

@@ -9,6 +9,10 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Tech_Stack_Icon.belongsToMany(models.Project, {
+        through: 'Tech_Stack_Project',
+        foreignKey: 'tech_stack_id',
+      });
     }
   }
   Tech_Stack_Icon.init(
