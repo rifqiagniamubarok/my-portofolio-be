@@ -16,6 +16,7 @@ module.exports = (sequelize, DataTypes) => {
       project_id: DataTypes.INTEGER,
       name: DataTypes.STRING,
       url: DataTypes.TEXT,
+      position: DataTypes.INTEGER,
       is_publish: { type: DataTypes.BOOLEAN, defaultValue: false },
     },
     {
