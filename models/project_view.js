@@ -8,7 +8,9 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      Project_View.belongsTo(models.Project, {
+        foreignKey: 'project_id',
+      });
     }
   }
   Project_View.init(
