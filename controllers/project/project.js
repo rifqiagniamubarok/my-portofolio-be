@@ -52,9 +52,18 @@ const getAll = async (req, res) => {
   }
 };
 
-const getDetail = async () => {
+const getDetail = async (req, res) => {
+  const { id } = req.params;
   try {
-  } catch (error) {}
+    const project = await Project.findByPk(id, {
+      include: [{ model: Tech_Stack_Icon, through: { attributes: [] } }, { model: Project_View }],
+    });
+
+    if (project === null) throw 'Project not found';
+    return res.status(200).json(respond(200, 'Get detail project successfuly', project));
+  } catch (error) {
+    return res.status(500).json(respond(500, error));
+  }
 };
 
 const createValidation = Joi.object({
@@ -118,9 +127,86 @@ const createData = async (req, res) => {
   }
 };
 
-const updateData = async () => {
+const updateValidation = Joi.object({
+  thumbnail: Joi.string(),
+  title: Joi.string(),
+  slug: Joi.string(),
+  meta_description: Joi.string(),
+  body: Joi.string(),
+  tech_stack: Joi.array().items(Joi.number()),
+  scale: Joi.string().valid('minor', 'moderate', 'major', 'massive'),
+  status: Joi.string().valid('draft', 'planning', 'in_progress', 'finished'),
+  project_view_add: Joi.array().items(
+    Joi.object({
+      name: Joi.string().required(),
+      url: Joi.string().required(),
+      position: Joi.number().required(),
+      is_publish: Joi.boolean().default(true),
+    })
+  ),
+  project_view_edit: Joi.array().items(
+    Joi.object({
+      id: Joi.number().required(),
+      name: Joi.string().required(),
+      url: Joi.string().required(),
+      position: Joi.number().required(),
+      is_publish: Joi.boolean().default(true),
+    })
+  ),
+  project_view_delete: Joi.array().items(
+    Joi.object({
+      id: Joi.number().required(),
+      name: Joi.string(),
+      url: Joi.string(),
+      position: Joi.number(),
+      is_publish: Joi.boolean(),
+    })
+  ),
+});
+
+const updateData = async (req, res) => {
+  const { id } = req.params;
+  const not_realdata = ['tech_stack', 'project_view_add', 'project_view_edit', 'project_view_delete'];
   try {
-  } catch (error) {}
+    // return res.json({ id });
+    const { error, value: body } = updateValidation.validate(req.body);
+    if (error) throw error.message;
+    const projectPayload = Object.fromEntries(Object.entries(body).filter(([key, _]) => !not_realdata.includes(key)));
+
+    await sequelize.transaction(async (t) => {
+      let project = await Project.findByPk(id, { include: [{ model: Tech_Stack_Icon }], transaction: t });
+      if (project === null) throw 'Project noot found';
+      for (let [key, value] of Object.entries(projectPayload)) {
+        project[key] = value;
+      }
+
+      const project_id = project.id;
+
+      if ('tech_stack' in body) {
+        let is_suitable = await checkTechStack(body.tech_stack);
+        if (is_suitable) {
+          await Tech_Stack_Project.destroy({ where: { project_id } });
+          const techStackPayload = body.tech_stack.map((tech_id) => {
+            return {
+              project_id,
+              tech_stack_id: tech_id,
+            };
+          });
+          await Tech_Stack_Project.bulkCreate(techStackPayload);
+        }
+      }
+
+      await project.save();
+      let getProject = await Project.findByPk(project_id, {
+        include: [{ model: Tech_Stack_Icon }],
+        transaction: t,
+      });
+
+      return res.status(200).json(respond(200, 'Update project successfuly', getProject));
+    });
+  } catch (error) {
+    return res.status(500).json(respond(500, error));
+  }
 };
 
 const publishData = async () => {
