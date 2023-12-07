@@ -32,7 +32,7 @@ const getAll = async (req, res) => {
       where: nameQuery,
       offset,
       limit,
-      attributes: ['id', 'thumbnail', 'title', 'slug', 'like', 'view', 'is_publish', 'meta_description'],
+      attributes: ['id', 'thumbnail', 'title', 'slug', 'like', 'view', 'is_publish', 'meta_description', 'scale', 'status'],
       include: [{ model: Tech_Stack_Icon, attributes: ['id', 'name'], through: { attributes: [] } }],
     });
 
