@@ -5,7 +5,7 @@ const respond = require('../../utils/respond');
 const getAll = async (req, res) => {
   try {
     const tech_stacks = await Tech_Stack_Icon.findAndCountAll();
-    return res.status(200).json(respond(200, 'Get tech stack succesfult', tech_stacks.rows));
+    return res.status(200).json(respond(200, 'Get tech stack succesfult', { data: tech_stacks.rows }));
   } catch (error) {
     res.status(500).json(respond(500, error, ''));
   }
