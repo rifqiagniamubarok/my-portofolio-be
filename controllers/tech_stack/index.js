@@ -26,7 +26,7 @@ const getDetail = async (req, res) => {
 
 const createValidation = Joi.object({
   name: Joi.string().required(),
-  image: Joi.string().required(),
+  icon: Joi.string().required(),
   about: Joi.string().required(),
 });
 
@@ -35,10 +35,16 @@ const createData = async (req, res) => {
     const { error, value: body } = createValidation.validate(req.body);
     if (error) throw error;
 
-    const icon = await Icon.findOne({ where: { path: body.image } });
-    if (icon === null) throw { statusCode: 404, msg: 'Image not found' };
+    const icon = await Icon.findOne({ where: { path: body.icon } });
+    if (icon === null) throw { statusCode: 404, msg: 'Icon not found' };
 
-    await Tech_Stack_Icon.create(body);
+    const payload = {
+      name: body.name,
+      icon_url: body.icon,
+      about: body.about,
+    };
+
+    await Tech_Stack_Icon.create(payload);
 
     return res.status(200).json(respond(200, 'Create new tech stack successfuly', body));
   } catch (error) {
