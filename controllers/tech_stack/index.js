@@ -54,7 +54,7 @@ const createData = async (req, res) => {
 
 const updateValidation = Joi.object({
   name: Joi.string(),
-  image: Joi.string(),
+  icon: Joi.string(),
   about: Joi.string(),
 });
 
@@ -69,11 +69,13 @@ const updateData = async (req, res) => {
     if (techStack === null) throw { status: 404, msg: 'Tech stack not found' };
 
     for (const [key, value] of Object.entries(body)) {
-      if (key === 'image') {
-        const icon = await Icon.findOne({ where: { path: body.image } });
+      if (key === 'icon') {
+        const icon = await Icon.findOne({ where: { path: body.icon } });
         if (icon === null) throw 'image not found';
+        else techStack.icon_url = body.icon;
+      } else {
+        techStack[key] = value;
       }
-      techStack[key] = value;
     }
 
     await techStack.save();
