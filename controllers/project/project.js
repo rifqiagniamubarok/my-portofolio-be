@@ -209,9 +209,32 @@ const updateData = async (req, res) => {
   }
 };
 
-const publishData = async () => {
+const publishData = async (req, res) => {
+  const { id } = req.params;
+
   try {
-  } catch (error) {}
+    const project = await Project.findByPk(id);
+    project.is_publish = true;
+    await project.save();
+
+    return res.status(200).json(respond(200, 'Publish project successfuly', project));
+  } catch (error) {
+    return res.status(500).json(respond(500, error, ''));
+  }
+};
+
+const unPublishData = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const project = await Project.findByPk(id);
+    project.is_publish = false;
+    await project.save();
+
+    return res.status(200).json(respond(200, 'Publish project successfuly', project));
+  } catch (error) {
+    return res.status(500).json(respond(500, error, ''));
+  }
 };
 
 const deleteData = async () => {
@@ -219,4 +242,4 @@ const deleteData = async () => {
   } catch (error) {}
 };
 
-module.exports = { getAll, getDetail, createData, updateData, publishData, deleteData };
+module.exports = { getAll, getDetail, createData, updateData, publishData, unPublishData, deleteData };

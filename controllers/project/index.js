@@ -1,3 +1,3 @@
-const { getAll, getDetail, createData, updateData } = require('./project');
+const { getAll, getDetail, createData, updateData, publishData, unPublishData } = require('./project');
 
-module.exports = { getAll, getDetail, createData, updateData };
+module.exports = { getAll, getDetail, createData, updateData, publishData, unPublishData };
