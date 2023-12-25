@@ -99,6 +99,8 @@ const createData = async (req, res) => {
     if (!is_suitable) throw 'Some tech stack not found';
     const projectPayload = Object.fromEntries(Object.entries(body).filter(([key, _]) => key !== 'project_view' && key !== 'tech_stack'));
 
+    // return res.json({ projectPayload });
+
     await sequelize.transaction(async (t) => {
       const newProject = await Project.create(projectPayload, { transaction: t });
 
@@ -213,7 +215,9 @@ const publishData = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const project = await Project.findByPk(id);
+    const project = await Project.findByPk(id, {
+      include: [{ model: Tech_Stack_Icon, through: { attributes: [] } }, { model: Project_View }],
+    });
     project.is_publish = true;
     await project.save();
 
@@ -227,7 +231,9 @@ const unPublishData = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const project = await Project.findByPk(id);
+    const project = await Project.findByPk(id, {
+      include: [{ model: Tech_Stack_Icon, through: { attributes: [] } }, { model: Project_View }],
+    });
     project.is_publish = false;
     await project.save();
 

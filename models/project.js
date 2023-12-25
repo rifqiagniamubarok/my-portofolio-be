@@ -20,7 +20,7 @@ module.exports = (sequelize, DataTypes) => {
   Project.init(
     {
       user_id: { type: DataTypes.INTEGER, defaultValue: 1 },
-      thumbnail: DataTypes.INTEGER,
+      thumbnail: DataTypes.TEXT,
       title: DataTypes.STRING,
       slug: DataTypes.TEXT,
       meta_description: DataTypes.TEXT,
