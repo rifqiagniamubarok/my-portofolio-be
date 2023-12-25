@@ -12,6 +12,7 @@ const post = require('./post');
 const publicPost = require('./post/public');
 const techStack = require('./tech_stack');
 const project = require('./project');
+const publicProject = require('./project/public');
 
 const Auth = require('../middlewares/auth');
 
@@ -26,5 +27,6 @@ router.use('/post', Auth, post);
 router.use('/public/post', publicPost);
 router.use('/tech-stack', Auth, techStack);
 router.use('/project', Auth, project);
+router.use('/public/project', publicProject);
 
 module.exports = router;
